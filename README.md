@@ -17,7 +17,7 @@ cd job-list && yarn
 to install necessary dependencies. Finally run
 
 ```sh
-yarn dev
+yarn build && yarn preview
 ```
 
 to start the app.
