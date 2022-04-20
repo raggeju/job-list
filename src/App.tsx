@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import JobListing from "./JobListing";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import { createTheme, ThemeProvider } from "@mui/material";
+import { createTheme, ThemeProvider, Typography } from "@mui/material";
 import "./App.css";
 
 interface CompanyProps {
@@ -49,15 +49,19 @@ interface JobProps {
   skills: string;
   slug: string;
   title: string;
-  urls: { ad: string; apply: string }[];
+  urls: { [key: string]: string };
 }
 
 function App() {
   const [data, setData] = useState<JobProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
-  const darkTheme = createTheme({ palette: { mode: "dark" } });
+  const darkTheme = createTheme({
+    typography: { h1: { fontSize: "3rem" } },
+    palette: { mode: "dark" },
+  });
 
   useEffect(() => {
     fetch(
@@ -67,10 +71,7 @@ function App() {
         if (response.ok) return response.json();
         throw response;
       })
-      .then((data) => {
-        console.log(data);
-        setData(data);
-      })
+      .then((data) => setData(data))
       .catch((error) => {
         console.error("Error fetching data: ", error);
         setError(error);
@@ -84,6 +85,9 @@ function App() {
   return (
     <div className="App">
       <ThemeProvider theme={darkTheme}>
+        <Typography variant="h1" color="common.white" padding="1rem">
+          Available jobs
+        </Typography>
         <List>
           {data?.map((job, key) => {
             return (
@@ -94,6 +98,8 @@ function App() {
                   employment_type={job.employment_type}
                   from_date={job.from_date}
                   location={job.locations[0].location.text}
+                  href={job.urls["ad"]}
+                  applyLink={job.urls["apply"]}
                 >
                   {job.descr}
                 </JobListing>

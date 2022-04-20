@@ -44,6 +44,8 @@ export interface JobListingProps {
   employment_type: string;
   from_date: string;
   location: string;
+  href: string;
+  applyLink: string;
 }
 
 export default function JobListing(props: JobListingProps) {
@@ -55,24 +57,24 @@ export default function JobListing(props: JobListingProps) {
 
   return (
     <Card sx={{ width: 1 }}>
-      <CardActionArea>
-        <CardHeader
-          avatar={
-            <Link href={props.company.website} target="_blank">
-              <Avatar
-                sx={{ bgcolor: red[500] }}
-                aria-label={props.company.name}
-                src={props.company.logo}
-              />
-            </Link>
-          }
-          title={props.title}
-          subheader={
-            <Link href={props.company.website} target="_blank">
-              {props.company.name}
-            </Link>
-          }
-        />
+      <CardHeader
+        avatar={
+          <Link href={props.company.website} target="_blank">
+            <Avatar
+              sx={{ bgcolor: red[500] }}
+              aria-label={props.company.name}
+              src={props.company.logo}
+            />
+          </Link>
+        }
+        title={props.title}
+        subheader={
+          <Link href={props.company.website} target="_blank">
+            {props.company.name}
+          </Link>
+        }
+      />
+      <CardActionArea href={props.href}>
         <CardContent>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             {props.employment_type}
@@ -96,10 +98,19 @@ export default function JobListing(props: JobListingProps) {
             dangerouslySetInnerHTML={{ __html: props.children }}
           />
         </CardContent>
-        <CardActions sx={{ justifyContent: "right" }}>
-          <Button size="small">Read More</Button>
-        </CardActions>
       </CardActionArea>
+      <CardActions sx={{ justifyContent: "right" }}>
+        {props.href && (
+          <Button component="a" size="small" href={props.href}>
+            Read More
+          </Button>
+        )}
+        {props.applyLink && (
+          <Button component="a" href={props.applyLink} size="small">
+            Apply
+          </Button>
+        )}
+      </CardActions>
     </Card>
   );
 }
